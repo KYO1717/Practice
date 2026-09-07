@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>숫자 맞추기 미니게임</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 360px;
+            width: 90%;
+        }
+        h1 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        p {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+        .input-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 1rem;
+        }
+        input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+            text-align: center;
+        }
+        button {
+            padding: 10px 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #message {
+            font-weight: bold;
+            margin-top: 1rem;
+            min-height: 24px;
+        }
+        #restart {
+            display: none;
+            width: 100%;
+            margin-top: 1rem;
+            background-color: #28a745;
+        }
+        #restart:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>숫자 맞추기 게임 🎯</h1>
+    <p>1부터 100 사이의 숫자를 맞춰보세요!</p>
+    
+    <div class="input-group">
+        <input type="number" id="guessInput" min="1" max="100" placeholder="숫자 입력">
+        <button onclick="checkGuess()">제출</button>
+    </div>
+
+    <div id="message"></div>
+    <button id="restart" onclick="resetGame()">다시 시작하기</button>
+</div>
+
+<script>
+    let targetNumber = Math.floor(Math.random() * 100) + 1;
+    let attempts = 0;
+
+    function checkGuess() {
+        const input = document.getElementById('guessInput');
+        const message = document.getElementById('message');
+        const restartBtn = document.getElementById('restart');
+        const userGuess = parseInt(input.value);
+
+        if (isNaN(userGuess) || userGuess < 1 || userGuess > 100) {
+            message.textContent = '1에서 100 사이의 유효한 숫자를 입력해주세요.';
+            message.style.color = '#dc3545';
+            return;
+        }
+
+        attempts++;
+
+        if (userGuess === targetNumber) {
+            message.textContent = `축하합니다! ${attempts}번 만에 맞추셨습니다 🎉`;
+            message.style.color = '#28a745';
+            input.disabled = true;
+            restartBtn.style.display = 'block';
+        } else if (userGuess < targetNumber) {
+            message.textContent = 'UP! 더 높은 숫자입니다.';
+            message.style.color = '#007bff';
+        } else {
+            message.textContent = 'DOWN! 더 낮은 숫자입니다.';
+            message.style.color = '#007bff';
+        }
+
+        input.value = '';
+        input.focus();
+    }
+
+    function resetGame() {
+        targetNumber = Math.floor(Math.random() * 100) + 1;
+        attempts = 0;
+        document.getElementById('guessInput').disabled = false;
+        document.getElementById('guessInput').value = '';
+        document.getElementById('message').textContent = '';
+        document.getElementById('restart').style.display = 'none';
+        document.getElementById('guessInput').focus();
+    }
+</script>
+
+</body>
+</html>
